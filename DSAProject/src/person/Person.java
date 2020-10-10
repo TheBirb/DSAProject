@@ -1,5 +1,7 @@
 package person;
 
+import java.util.ArrayList;
+
 public class Person {
 	//Attributes
 	private String id;
@@ -12,7 +14,7 @@ public class Person {
 	private String workedat;
 	private String movies;
 	private String groupCode;
-	
+	ArrayList<String> friendList= new ArrayList<>();
 	
 	//class person
 	public Person(){
@@ -98,10 +100,24 @@ public class Person {
 	public void setGroupCode(String groupCode) {
 		this.groupCode = groupCode;
 	}
+	
+	public void addFriend(String uId) {
+		friendList.add(uId);
+	}
+	public int numberOfFriends() {
+		return this.friendList.size();
+	}
+	public String getFriends() {
+		String friends="Friends: ";
+		for(int i=0; i<friendList.size();i++) {
+			friends= friends+friendList.get(i)+",";
+		}
+		return friends;
+	}
 	@Override
 	public String toString() {
 		
-		return "Id:"+this.id+","+"Name: "+this.name+","+"Surnames: "+this.surnames+","+"Birthdate: "+this.birthdate+","+"Home: "+this.home+","+"Studied at: "+this.studiedat+","+"Worked at:"+this.workedat+","+"Movies: "+this.movies+","+"GroupCode: "+this.groupCode;
+		return "Id:"+this.id+","+"Name: "+this.name+","+"Surnames: "+this.surnames+","+"Birthdate: "+this.birthdate+","+"Home: "+this.home+","+"Studied at: "+this.studiedat+","+"Worked at:"+this.workedat+","+"Movies: "+this.movies+","+"GroupCode: "+this.groupCode+","+getFriends();
 	}
 	
 	
