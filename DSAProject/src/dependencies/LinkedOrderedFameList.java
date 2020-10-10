@@ -8,7 +8,8 @@ public class LinkedOrderedFameList extends LinkedList<Person>{
 		super();
 	}
 	
-	public void add() {
+	//TODO hay que hacer que meta a la gente de forma ordenada
+	public void add(Person p) {
 		
 	}
 }

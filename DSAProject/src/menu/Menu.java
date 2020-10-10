@@ -1,5 +1,16 @@
 package menu;
 
-public class Menu {
+import socialNetwork.SocialNetwork;
 
+public class Menu {
+	
+	
+	
+	public static void main(String[] args) {
+		
+		SocialNetwork socialNetwork=new SocialNetwork();
+		socialNetwork.loadNetwork();
+		socialNetwork.readFriendShip();
+		
+	}
 }

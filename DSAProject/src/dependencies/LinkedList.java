@@ -1,10 +1,12 @@
 package dependencies;
 import exceptions.*;
+
+
 import java.util.Iterator;
 
 public class LinkedList<T> implements ListADT<T>, Iterable<T> {
-	private LinearNode<T> front;
-	private LinearNode<T> rear;
+	protected LinearNode<T> front;
+	protected LinearNode<T> rear;
 	private int count;
 	
 	public LinkedList() {
@@ -145,16 +147,10 @@ public class LinkedList<T> implements ListADT<T>, Iterable<T> {
 		return new LinkedIterator<T>(front,count);
 	}
 	
-	public void add(T elem) {
-		LinearNode<T> newNode= new LinearNode<>(elem);
-		if(isEmpty()) {
-			front=newNode;
-			rear=newNode;
-		}else {
-			rear.setNext(newNode);
-			rear=newNode;
-		}
-	}
+	
+	
+	
+	
 	
 	
 	

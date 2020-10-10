@@ -14,6 +14,7 @@ public class Person {
 	private String workedat;
 	private String movies;
 	private String groupCode;
+	private String gender;
 	ArrayList<String> friendList= new ArrayList<>();
 	
 	//class person
@@ -99,6 +100,13 @@ public class Person {
 
 	public void setGroupCode(String groupCode) {
 		this.groupCode = groupCode;
+	}
+	
+	public void setGender(String gender) {
+		this.gender=gender;
+	}
+	public String getGender() {
+		return this.gender;
 	}
 	
 	public void addFriend(String uId) {
