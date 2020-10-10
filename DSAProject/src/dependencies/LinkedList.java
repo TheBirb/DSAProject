@@ -7,7 +7,7 @@ import java.util.Iterator;
 public class LinkedList<T> implements ListADT<T>, Iterable<T> {
 	protected LinearNode<T> front;
 	protected LinearNode<T> rear;
-	private int count;
+	protected int count;
 	
 	public LinkedList() {
 		this.front=null;

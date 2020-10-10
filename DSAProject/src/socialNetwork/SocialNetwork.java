@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Iterator;
+
 import dependencies.LinkedOrderedFameList;
 import dependencies.LinkedPersonList;
 import person.Person;
@@ -44,6 +46,7 @@ public class SocialNetwork {
 				list.add(p);
 				
 			}
+			
 			sr.close();
 			
 		} catch (FileNotFoundException e) {
@@ -77,6 +80,19 @@ public class SocialNetwork {
 		
 		
 		
+	}
+	public void loadFame() {
+		
+		for(Iterator<Person> i= list.iterator(); i.hasNext();) {
+			fameList.add(i.next());
+			
+		}
+		
+		
+		
+	}
+	public void whoIsFamous() {
+		fameList.famousThree();
 	}
 	
 	

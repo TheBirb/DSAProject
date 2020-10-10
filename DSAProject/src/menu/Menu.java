@@ -11,6 +11,8 @@ public class Menu {
 		SocialNetwork socialNetwork=new SocialNetwork();
 		socialNetwork.loadNetwork();
 		socialNetwork.readFriendShip();
+		socialNetwork.loadFame();
+		socialNetwork.whoIsFamous();
 		
 	}
 }
