@@ -1,0 +1,5 @@
+Javi99,Javi,Fernández,9-7-2000,Bilbao,Donostia,Jesuitak,Orlando,Boxeador,I94
+Marta02,Marta,Caraculo,6-4-2000,Sanse,Bilbao,Lizeo,Paris,El nota,U63
+Jon21,Jon,Garcia,1-1-1980,Donostia,Donostia,Santo Tomas,Paris,Taxi Driver,G61
+Alvaro99,Alvaro,Chulo,5-5-8000,Sanse,Sanse,Sanse,Sanse,Sanse,I99
+Juan99
