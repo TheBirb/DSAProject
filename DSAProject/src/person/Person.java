@@ -15,7 +15,7 @@ public class Person {
 	private String movies;
 	private String groupCode;
 	private String gender;
-	ArrayList<String> friendList= new ArrayList<>();
+	private ArrayList<String> friendList= new ArrayList<>();
 	
 	//class person
 	public Person(){

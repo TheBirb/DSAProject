@@ -3,7 +3,7 @@ package dependencies;
 
 import person.Person;
 
-public class LinkedOrderedFameList extends LinkedPersonList{
+public class LinkedOrderedFameList extends LinkedList<Person>{
 	
 	public LinkedOrderedFameList() {
 		super();
