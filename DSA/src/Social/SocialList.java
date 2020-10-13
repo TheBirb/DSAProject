@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.Scanner;
 
 import Exceptions.*;
 import structures.LinkedList;
+import structures.LinkedOrderedFameList;
 /**
  * Class that represents a network
  * @author Iker Pintado
@@ -112,41 +114,16 @@ public class SocialList {
 	}
 	
 	/**
-	 * returns a list with the most popular 3 people
-	 * @return a list with the 3 most popular ones
-	 * @throws NotEnoughPeopleException if the list is shorter than 3
+	 * returns a list with the most popular  people
+	 * @return a list with the most popular ones ordered
 	 */
-	public Person[] mostPopular3() throws NotEnoughPeopleException{
-		int p1=0;
-		int p2=0;
-		int p3=0;
-		Person pe=null;
-		Person e1=pe,e2=pe,e3=pe;
-		if(list==null || list.size()<3) {
-			throw new NotEnoughPeopleException("\n \u001B[31m"+"There are not enough people to do this"+"\u001B[0m \n");
+	public LinkedOrderedFameList mostPopular(){
+		LinkedOrderedFameList fameList=new LinkedOrderedFameList();
+		for(Iterator<Person> i=list.iterator(); i.hasNext();) {
+			fameList.add(i.next());
 		}
-		for(Person p:list) {
-			if(p.getNumFriends()>=p3) {
-				if(p.getNumFriends()>p2) {
-					if(p.getNumFriends()>p1) {
-						e1=p;
-						p1=p.getNumFriends();
-					}else {
-						e2=p;
-						p2=p.getNumFriends();
-					}
-				}else {
-					e3=p;
-					p3=p.getNumFriends();
-				}
-			}
-		}
-		
-		Person[] l=new Person[3];
-		l[0]=e1;
-		l[1]=e2;
-		l[2]=e3;
-		return l;
+		return fameList;
+
 	}
 	/**
 	 * method that adds people from a file

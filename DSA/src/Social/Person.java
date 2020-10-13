@@ -213,26 +213,26 @@ public class Person {
 			if(!getPersonData()[1].equals(""))	
 				r=r+"\n Name: "+getPersonData()[1];
 			if(!getPersonData()[2].equals(""))
-				r=r+"\n Last name: "+getPersonData()[2]+"\n";
+				r=r+"\n Last name: "+getPersonData()[2];
 			if(!getPersonData()[3].equals(""))
-				r=r+" Birthday: "+getPersonData()[3]+"\n";
+				r=r+"\n Birthday: "+getPersonData()[3];
 			if(!getPersonData()[4].equals(""))
-				r=r+" Gender: "+getPersonData()[4]+"\n";
+				r=r+"\n Gender: "+getPersonData()[4];
 			if(!getPersonData()[5].equals(""))
-				r=r+" Birth place: "+getPersonData()[5]+"\n";
+				r=r+"\n Birth place: "+getPersonData()[5];
 			if(!getPersonData()[6].equals(""))
-				r=r+" Home: "+getPersonData()[6]+"\n";
+				r=r+"\n Home: "+getPersonData()[6];
 			if(!getPersonData()[7].equals(""))
-				r=r+" Has studied at: "+getPersonData()[7]+"\n";
+				r=r+"\n Has studied at: "+getPersonData()[7];
 			if(!getPersonData()[8].equals(""))
-				r=r+" Worked at: "+getPersonData()[8]+"\n";
+				r=r+"\n Worked at: "+getPersonData()[8];
 			if(!getPersonData()[9].equals(""))
-				r=r+" Favourite films: "+getPersonData()[9]+"\n";
-			
-				r=r+" Has "+getNumFriends()+" friends\n";
+				r=r+"\n Favourite films: "+getPersonData()[9];
 				
 			if(!getPersonData()[10].equals(""))
-				r=r+" Group code: "+getPersonData()[10];
+				r=r+"\n Group code: "+getPersonData()[10];
+			
+			r=r+"\n Has "+getNumFriends()+" friends";
 				r=r+"\u001B[0m"+"\n"+"\u001B[33m"+"--------------------------------"+"\u001B[0m";
 			return r;
 			
@@ -277,6 +277,22 @@ public class Person {
 			}
 			System.out.println("There are no"+lone+" friends...");
 		}
+		
+		/**
+		 * Prints all the friends´s id's of this person
+		 */
+		public void printFriendsNames() {
+			System.out.println("Friends:");
+			String lone="";
+			if(!friendList.isEmpty()) {
+				for(int i=0;i<friendList.size();i++) {
+					System.out.println("\u001B[36m"+friendList.get(i).getPersonData()[0]+"\u001B[0m");
+				}
+				lone=" more";
+			}
+			System.out.println("There are no"+lone+" friends...");
+		}
+		
 		/**
 		 * Method to know if a person object id in friend list
 		 * @param The person we will check

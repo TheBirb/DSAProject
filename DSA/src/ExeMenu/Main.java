@@ -36,7 +36,7 @@ public class Main {
 					+ "-------------------------------------------------------"
 					+ "\n|"+"\u001B[34m"+"Show someone´s friends----1                          "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[34m"+"show all the people of the network----2              "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"show the three most famous people----3               "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[34m"+"show all the people ordered by fame----3             "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[34m"+"check existence of someone----4                      "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[34m"+"Print all the people of the network at a .txt----5   "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[34m"+"print someone´s data----6                            "+ "\u001B[33m"+"|"
@@ -61,14 +61,11 @@ public class Main {
 					soc.printPeople();
 					break;
 				case "3":
-					try {
-						for(int i=0; i<3;i++) {
-							System.out.println(soc.mostPopular3()[i].toString());
-						}
-					} catch (NotEnoughPeopleException e) {
 					
-						System.out.println("\n \u001B[31m"+e.getMessage()+"\u001B[0m \n");
+					for(Person p:soc.mostPopular()) {
+							System.out.println(p.toString());
 					}
+					
 				
 					break;
 				case "4":
@@ -282,8 +279,30 @@ public class Main {
 		String id=s.nextLine();
 
 		try {
-	
-			soc.findPerson(id).printFriends();
+			System.out.println("\u001B[33m"+id+" has "+soc.findPerson(id).getNumFriends()+" friends");
+			if(soc.findPerson(id).getNumFriends()!=0) {
+				System.out.println("what will you do now? \n type 1 to print the friends´ info \n type 2 just to print the friends´ id´s \n type anything else to do nothing"+"\u001B[0m");
+				String k=s.nextLine();
+				
+				switch(k) {
+					case "1":
+						soc.findPerson(id).printFriends();
+						break;
+					case "2":
+						soc.findPerson(id).printFriendsNames();
+						System.out.println("\u001B[33m"+"Type \"yes\" if you want to print their information"+"\u001B[0m");
+						String ok=s.nextLine();
+						if(ok.equals("yes")){
+							soc.findPerson(id).printFriends();
+						}
+						break;
+					default:
+						System.out.println("\u001B[33m"+"ok..."+"\u001B[0m");
+						break;
+				}
+			}
+			
+			
 				
 		} catch (PersonNotFoundException e) {
 			System.out.println("\n \u001B[31m"+"This person does not belong to the network"+"\u001B[0m \n");
