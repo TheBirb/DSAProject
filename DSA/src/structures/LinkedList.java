@@ -200,6 +200,36 @@ public class LinkedList<T> implements ListADT<T>,Iterable<T>{
 		return res;
 	}
 	
+	/**
+	 * gets the index of the element
+	 * @param the object
+	 * @return the index
+	 * @throws ElementNotFoundException when the element does not belong to the list
+	 * @throws EmptyCollectionException if the list is empty
+	 */
+	public int getIndex(T p) throws ElementNotFoundException,EmptyCollectionException{
+		int res=0;
+		LinearNode<T> traverse=head;
+		int i=0;
+		if(isEmpty()) throw new EmptyCollectionException("Linked List");
+		boolean done=false;
+		
+		while(traverse!=null&&!done) {
+			if(traverse.getElement().equals(p)) {
+				done=true;
+			}else {
+				traverse=traverse.getNext();
+				i++;
+			}
+		}
+			
+			res=i;
+		if(traverse==null) throw new ElementNotFoundException();
+			
+		return res;
+	}
+	
+	
 	@Override
 	public T first() {
 		
