@@ -1,7 +1,7 @@
 package Social;
 
 import structures.LinkedList;
-
+import structures.LinkedOrderedFameList;
 import Exceptions.AlreadyAddedFriend;
 import Exceptions.ElementNotFoundException;
 import Exceptions.EmptyCollectionException;
@@ -34,7 +34,10 @@ public class Person {
 		 * friend list
 		 */
 		protected LinkedList<Person> friendList;
-		
+		/**
+		 * the ordered by fame list of persons of the network
+		 */
+		protected LinkedOrderedFameList friendFameList;
 		/**
 		 * constructor of the class, makes sure that no field is null
 		 * @param the data of the person
@@ -51,6 +54,7 @@ public class Person {
 			}
 			this.personData = p;
 			friendList=new LinkedList<Person>();
+			friendFameList=new LinkedOrderedFameList();
 		}
 		
 
@@ -173,6 +177,8 @@ public class Person {
 			try {
 				p.friendList.remove(this);
 				this.friendList.remove(p);
+				p.friendFameList.remove(this);
+				this.friendFameList.remove(p);
 			} catch (EmptyCollectionException | ElementNotFoundException e) {
 				System.out.println("\n "+"\u001B[31m"+"friend already removed or has never existed"+"\u001B[0m \n");
 			}
@@ -188,6 +194,8 @@ public class Person {
 			if(f.isFriend(this)) throw new AlreadyAddedFriend();
 			this.friendList.addToHead(f);
 			f.friendList.addToHead(this);
+			this.friendFameList.add(f);
+			f.friendFameList.add(this);
 		}
 		/**
 		 * Method to add a film to the film list
@@ -279,6 +287,21 @@ public class Person {
 		}
 		
 		/**
+		 * Prints all the friends of this person in order of fame
+		 */
+		public void printFamousFriends() {
+			System.out.println("Friends:");
+			String lone="";
+			if(!friendFameList.isEmpty()) {
+				for(int i=0;i<friendFameList.size();i++) {
+					System.out.println(friendFameList.get(i).toString());
+				}
+				lone=" more";
+			}
+			System.out.println("There are no"+lone+" friends...");
+		}
+		
+		/**
 		 * Prints all the friends´s id's of this person
 		 */
 		public void printFriendsNames() {
@@ -287,6 +310,21 @@ public class Person {
 			if(!friendList.isEmpty()) {
 				for(int i=0;i<friendList.size();i++) {
 					System.out.println("\u001B[36m"+friendList.get(i).getPersonData()[0]+"\u001B[0m");
+				}
+				lone=" more";
+			}
+			System.out.println("There are no"+lone+" friends...");
+		}
+		
+		/**
+		 * Prints all the friends´s id's of this person
+		 */
+		public void printFamousFriendsNames() {
+			System.out.println("Friends:");
+			String lone="";
+			if(!friendFameList.isEmpty()) {
+				for(int i=0;i<friendFameList.size();i++) {
+					System.out.println("\u001B[36m"+friendFameList.get(i).getPersonData()[0]+"\u001B[0m");
 				}
 				lone=" more";
 			}

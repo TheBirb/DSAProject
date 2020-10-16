@@ -35,20 +35,21 @@ public class Main {
 			System.out.println("\u001B[33m"
 					+ "-------------------------------------------------------"
 					+ "\n|"+"\u001B[34m"+"Show someone´s friends----1                          "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"show all the people of the network----2              "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"show all the people ordered by fame----3             "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"check existence of someone----4                      "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"Print all the people of the network at a .txt----5   "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"print someone´s data----6                            "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"Print all the relationships to a .txt----7           "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"add another people file----8                         "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"add relationships file----9                          "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"add a single person----10                            "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"add a relation-----11                                "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"remove a single person----12                         "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"remove a relationship----13                          "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"remove people from a .txt----14                      "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"remove relationships from a .txt----15               "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[34m"+"Show someone´s friends ordered by fame----2          "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[34m"+"show all the people of the network----3              "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[34m"+"show all the people ordered by fame----4             "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[34m"+"check existence of someone----5                      "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[34m"+"Print all the people of the network at a .txt----6   "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[34m"+"print someone´s data----7                            "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[34m"+"Print all the relationships to a .txt----8           "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[34m"+"add another people file----9                         "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[34m"+"add relationships file----10                         "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[34m"+"add a single person----11                            "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[34m"+"add a relation-----12                                "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[34m"+"remove a single person----13                         "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[34m"+"remove a relationship----14                          "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[34m"+"remove people from a .txt----15                      "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[34m"+"remove relationships from a .txt----16               "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[34m"+"log out with any other number                        "+ "\u001B[33m"+"|"
 					+ "\n-------------------------------------------------------"+"\u001B[0m" );
 			opt=s.nextLine();
@@ -58,17 +59,15 @@ public class Main {
 					someonesFriends(soc);
 					break;
 				case "2":
-					soc.printPeople();
+					someonesFamousFriends(soc);
 					break;
 				case "3":
-					
-					for(Person p:soc.mostPopular()) {
-							System.out.println(p.toString());
-					}
-					
-				
+					soc.printPeople();
 					break;
-				case "4":
+				case "4":	
+					soc.printFamePeople();
+					break;
+				case "5":
 
 					if(exist(soc))
 						System.out.println("\n \u001B[32m"+"This person exists"+"\u001B[0m \n");
@@ -76,41 +75,41 @@ public class Main {
 						System.out.println("\n \u001B[31m"+"This person does not exist"+"\u001B[0m \n");
 					
 					break;
-				case "5":
+				case "6":
 					soc.getTXT();
 					
 					break;
-				case "6":
+				case "7":
 					findSomeone(soc);
 					
 					break;
-				case "7":
+				case "8":
 					soc.getRelasTXT();
 					
 					break;
-				case "8":
+				case "9":
 					newFile(soc);
 					break;
-				case "9":
+				case "10":
 					newRela(soc);
 					break;
-				case "10":
+				case "11":
 					register(soc);
 					break;
-				case "11":
+				case "12":
 					addFriend(soc);
 					
 					break;
-				case "12":
+				case "13":
 					remove(soc);
 					break;
-				case "13":
+				case "14":
 					removeFriend(soc);
 					break;
-				case "14":
+				case "15":
 					removeFile(soc);
 					break;
-				case "15":
+				case "16":
 					removeRela(soc);
 					break;
 				default:
@@ -197,7 +196,7 @@ public class Main {
 		try {
 			per=so.findPerson(id);
 			so.removePerson(per);
-		} catch (PersonNotFoundException e) {
+		} catch (ElementNotFoundException e) {
 			System.out.println("\n \u001B[31m"+"This person is already removed or does not exist"+"\u001B[0m \n");
 		}
 		
@@ -218,7 +217,8 @@ public class Main {
 			Person f=so.findPerson(id1);
 			Person n=so.findPerson(id2);
 			n.addFriend(f);
-		} catch (PersonNotFoundException e) {
+			so.updateFame(f, n);
+		} catch (ElementNotFoundException e) {
 			System.out.println("\n \u001B[31m"+"one or the both id´s does/do not exist"+"\u001B[0m \n");
 		} catch (AlreadyAddedFriend e){
 			System.out.println("\n \u001B[31m"+"relation already added"+"\u001B[0m \n");
@@ -243,7 +243,8 @@ public class Main {
 			Person f=so.findPerson(id1);
 			Person n=so.findPerson(id2);
 			n.removeFriend(f);
-		} catch (PersonNotFoundException e) {
+			so.updateFame(f, n);
+		} catch (ElementNotFoundException e) {
 			System.out.println("\n \u001B[31m"+"one or the both id´s does/do not exist"+"\u001B[0m \n");
 		} 
 	
@@ -263,7 +264,7 @@ public class Main {
 	
 			System.out.println(soc.findPerson(id).toString());
 			
-		} catch (PersonNotFoundException e) {
+		} catch (ElementNotFoundException e) {
 			System.out.println("\n \u001B[31m"+"This person does not belong to the network"+"\u001B[0m \n");
 		}
 	}
@@ -304,11 +305,54 @@ public class Main {
 			
 			
 				
-		} catch (PersonNotFoundException e) {
+		} catch (ElementNotFoundException e) {
 			System.out.println("\n \u001B[31m"+"This person does not belong to the network"+"\u001B[0m \n");
 		}
 
 	}
+	
+	/**
+	 * prints all the friends of the wanted person ordered by fame
+	 * @param the network
+	 */
+	@SuppressWarnings("resource")
+	public static void someonesFamousFriends(SocialList soc) {
+		Scanner s=new Scanner(System.in);
+		System.out.println("\u001B[33m"+"type the id of the person whose firends will be printed in fame order:"+"\u001B[0m ");
+		String id=s.nextLine();
+
+		try {
+			System.out.println("\u001B[33m"+id+" has "+soc.findPerson(id).getNumFriends()+" friends");
+			if(soc.findPerson(id).getNumFriends()!=0) {
+				System.out.println("what will you do now? \n type 1 to print the friends´ info \n type 2 just to print the friends´ id´s \n type anything else to do nothing"+"\u001B[0m");
+				String k=s.nextLine();
+				
+				switch(k) {
+					case "1":
+						soc.findPerson(id).printFamousFriends();
+						break;
+					case "2":
+						soc.findPerson(id).printFamousFriendsNames();
+						System.out.println("\u001B[33m"+"Type \"yes\" if you want to print their information"+"\u001B[0m");
+						String ok=s.nextLine();
+						if(ok.equals("yes")){
+							soc.findPerson(id).printFamousFriends();
+						}
+						break;
+					default:
+						System.out.println("\u001B[33m"+"ok..."+"\u001B[0m");
+						break;
+				}
+			}
+			
+			
+				
+		} catch (ElementNotFoundException e) {
+			System.out.println("\n \u001B[31m"+"This person does not belong to the network"+"\u001B[0m \n");
+		}
+
+	}
+	
 	/**
 	 * says if someone is in the network
 	 * @param the network
@@ -364,7 +408,7 @@ public class Main {
 		String id=s.nextLine();
 		try {
 			soc.setFriendships(id);	
-		} catch (PersonNotFoundException e) {
+		} catch (ElementNotFoundException e) {
 			System.out.println("\n \u001B[31m"+e.getMessage()+"\u001B[0m \n");
 		}
 		
@@ -380,7 +424,7 @@ public class Main {
 		String id=s.nextLine();
 		try {
 			soc.removeFriendships(id);	
-		} catch (PersonNotFoundException e) {
+		} catch (ElementNotFoundException e) {
 			System.out.println("\n \u001B[31m"+e.getMessage()+"\u001B[0m \n");
 		}
 		

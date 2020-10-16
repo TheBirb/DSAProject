@@ -1,47 +1,40 @@
 package structures;
-import Social.Person;
 
+import Exceptions.AlreadyAddedFriend;
+import Exceptions.ElementNotFoundException;
+import Exceptions.EmptyCollectionException;
+import Social.Person;
+/**
+ * Class for a Person class object type that has the people ordered by fame
+ * @author Jon Moriñigo
+ *
+ */
 public class LinkedOrderedFameList extends LinkedList<Person>{
+	/**
+	 * Constructor of the class
+	 */
 	public LinkedOrderedFameList() {
 		super();
 	}
 	
-	@Override
-	public void add(Person p,int inde) {
-		System.out.println("You cannot choose the index in this list");
-		add(p);
-	}
-	
-	@Override
-	public void addToTail(Person p) {
-		System.out.println("In this data structure you cant chose this");
-		add(p);
-	}
-	@Override
-	public void addToHead(Person p) {
-		System.out.println("In this data structure you cant chose this");
-		add(p);
-		
-	}
-	
-	
+	/**
+	 * adds a person ordered by the number of friends, we should only use
+	 * this method out of the structure to add people
+	 * @param p-The person
+	 */
 	public void add(Person p) {
 		int num= p.getNumFriends();
-		LinearNode<Person> newNode= new LinearNode<>(p);
-		
+		int i=0;
 		if(isEmpty()) {
 			
-			head=newNode;
-			tail=newNode;
+			super.addToHead(p);
 		}else {
 			if(size()==1) {
 				
 				if(head.getElement().getNumFriends()>=num) {
-					head.setNext(newNode);
-					tail=newNode;
+					super.addToTail(p);
 				}else {
-				 newNode.setNext(head);
-				 head=newNode;
+				 super.addToHead(p);
 				}
 				
 					
@@ -49,38 +42,60 @@ public class LinkedOrderedFameList extends LinkedList<Person>{
 			}else {
 				
 				LinearNode<Person> actual=head;
-				LinearNode<Person> previous=null;
+				//LinearNode<Person> previous=null;
 				while(actual.getElement().getNumFriends()>num&&actual.getNext()!=null) {
-					previous=actual;
+					//previous=actual;
 					actual=actual.getNext();
+					i++;
 				}
 				if(actual.getNext()==null) {
 					if(actual.getElement().getNumFriends()>num) {
-						actual.setNext(newNode);
-						tail=newNode;
+						super.addToTail(p);
 					}else {
-						newNode.setNext(actual);
-						previous.setNext(newNode);
+						super.add(p, i);
 					}
 				}else {
-					newNode.setNext(actual);
-					previous.setNext(newNode);
+					super.add(p, i);
 				}
 			}
+		}
+	}
+	/**
+	 * Adds a relation and reorders the list
+	 * @param p: person one of the relation
+	 * @param target: person two of the relation
+	 * @throws ElementNotFoundException when the elements are not on the list.
+	 */
+	public void AddOrderedFriend(Person p,Person target) throws ElementNotFoundException{
+		if(this.contains(p)&&this.contains(target)) {
+			p=this.get(this.getIndex(p));//making sure that the introduced element is from the list and not an equivalent
+			p=this.get(this.getIndex(p));//making sure that the introduced element is from the list and not an equivalent
+			try {
+				p.addFriend(target);
+			} catch (AlreadyAddedFriend e) {
+				System.out.println("\n \u001B[31m"+"Already added friend"+"\u001B[0m \n");
 			}
-		count++;
+			update(p);
+			update(target);
+			
+		}else throw new ElementNotFoundException();
+	}
+	/**
+	 * updates the position of a Person
+	 * @param p:the person to update
+	 */
+	public void update(Person p) {
+		
+		try {
+			this.remove(p);
+		} catch (EmptyCollectionException e) {
+			System.out.println("\n \u001B[31m"+e.getMessage()+"\u001B[0m \n");
+	
+		} catch (ElementNotFoundException e) {
+			System.out.println("\n \u001B[31m"+"Element not found"+"\u001B[0m \n");
+		}
+		add(p);
+	
 	}
 	
-	public String toString() {
-		System.out.println();
-		LinearNode<Person> actual=head;
-		String result="";
-		while(actual.getNext()!=null) {
-			result=result+"s:  "+actual.getElement().getNumFriends()+" ";
-			
-			actual=actual.getNext();
-		}
-		result=result+"s:  "+actual.getElement().getNumFriends()+" ";
-		return result;
-	}
 }
