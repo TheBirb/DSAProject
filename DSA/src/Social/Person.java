@@ -192,8 +192,8 @@ public class Person {
 		 */
 		public void addFriend(Person f) throws AlreadyAddedFriend{
 			if(f.isFriend(this)) throw new AlreadyAddedFriend();
-			this.friendList.addToHead(f);
-			f.friendList.addToHead(this);
+			this.friendList.addToTail(f);
+			f.friendList.addToTail(this);
 			this.friendFameList.add(f);
 			f.friendFameList.add(this);
 		}

@@ -133,7 +133,12 @@ public class SocialList {
 		}
 		System.out.println("\n \u001B[33m"+"There are no more people"+"\u001B[0m \n");
 	}
-	
+	/**
+	 * updates the fame of the introduced people, it is to say, relocates the people in the ordered list
+	 * to update the position
+	 * @param p:Person 1
+	 * @param q:Person 2
+	 */
 	public void updateFame(Person p,Person q) {
 		fameList.update(p);
 		fameList.update(q);
