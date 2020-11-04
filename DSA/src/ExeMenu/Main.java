@@ -280,21 +280,21 @@ public class Main {
 		String id=s.nextLine();
 
 		try {
-			System.out.println("\u001B[33m"+id+" has "+soc.findPerson(id).getNumFriends()+" friends");
-			if(soc.findPerson(id).getNumFriends()!=0) {
+			Person p=soc.findPerson(id);
+			System.out.println("\u001B[33m"+id+" has "+p.getNumFriends()+" friends");
+			if(p.getNumFriends()!=0) {
 				System.out.println("what will you do now? \n type 1 to print the friends´ info \n type 2 just to print the friends´ id´s \n type anything else to do nothing"+"\u001B[0m");
 				String k=s.nextLine();
-				
 				switch(k) {
 					case "1":
-						soc.findPerson(id).printFriends();
+						p.printFriends();
 						break;
 					case "2":
-						soc.findPerson(id).printFriendsNames();
+						p.printFriendsNames();
 						System.out.println("\u001B[33m"+"Type \"yes\" if you want to print their information"+"\u001B[0m");
 						String ok=s.nextLine();
 						if(ok.equals("yes")){
-							soc.findPerson(id).printFriends();
+							p.printFriends();
 						}
 						break;
 					default:
@@ -322,21 +322,22 @@ public class Main {
 		String id=s.nextLine();
 
 		try {
-			System.out.println("\u001B[33m"+id+" has "+soc.findPerson(id).getNumFriends()+" friends");
-			if(soc.findPerson(id).getNumFriends()!=0) {
+			Person p=soc.findPerson(id);
+			System.out.println("\u001B[33m"+id+" has "+p.getNumFriends()+" friends");
+			if(p.getNumFriends()!=0) {
 				System.out.println("what will you do now? \n type 1 to print the friends´ info \n type 2 just to print the friends´ id´s \n type anything else to do nothing"+"\u001B[0m");
 				String k=s.nextLine();
 				
 				switch(k) {
 					case "1":
-						soc.findPerson(id).printFamousFriends();
+						p.printFamousFriends();
 						break;
 					case "2":
-						soc.findPerson(id).printFamousFriendsNames();
+						p.printFamousFriendsNames();
 						System.out.println("\u001B[33m"+"Type \"yes\" if you want to print their information"+"\u001B[0m");
 						String ok=s.nextLine();
 						if(ok.equals("yes")){
-							soc.findPerson(id).printFamousFriends();
+							p.printFamousFriends();
 						}
 						break;
 					default:

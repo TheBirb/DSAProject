@@ -112,26 +112,26 @@ public class SocialList {
 	 *Prints all the people of the network
 	 */
 	public void printPeople() {
-		System.out.println("\n \u001B[33m"+"People:"+"\u001B[0m \n");
+		String pr="\n \u001B[33m"+"People:"+"\u001B[0m \n\n";
 		if(list!=null) {
-			for(int i=0;i<list.size();i++) {
-				System.out.println(list.get(i).toString());
+			for(Person p:list) {
+				pr=pr+p.toString()+"\n";
 			}
 		}
-		System.out.println("\n \u001B[33m"+"There are no more people"+"\u001B[0m \n");
+		System.out.println(pr+"\n \u001B[33m"+"There are no more people"+"\u001B[0m \n");
 	}
 	
 	/**
 	 *Prints all the people of the network ordered by fame
 	 */
 	public void printFamePeople() {
-		System.out.println("\n \u001B[33m"+"People:"+"\u001B[0m \n");
+		String pr="\n \u001B[33m"+"People:"+"\u001B[0m \n\n";
 		if(list!=null) {
-			for(int i=0;i<fameList.size();i++) {
-				System.out.println(fameList.get(i).toString());
+			for(Person p:fameList) {
+				pr=pr+p.toString()+"\n";
 			}
 		}
-		System.out.println("\n \u001B[33m"+"There are no more people"+"\u001B[0m \n");
+		System.out.println(pr+"\n \u001B[33m"+"There are no more people"+"\u001B[0m \n");
 	}
 	/**
 	 * updates the fame of the introduced people, it is to say, relocates the people in the ordered list
@@ -320,9 +320,11 @@ public class SocialList {
 	public void getTXT() {
 		try {
 			PrintWriter wrfile =new PrintWriter(new File("wrotePeople.txt"));
+			String pr="";
 			for(Person p:list) {
-				wrfile.println(p.toStringTXT());
+				pr=pr+p.toStringTXT()+"\n";
 			}
+			wrfile.println(pr);
 			wrfile.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("\n \u001B[31m"+"txt not found"+"\u001B[0m \n");
@@ -333,19 +335,26 @@ public class SocialList {
 	 */
 	public void getRelasTXT() {
 		try {
-			Person au,au2;
+			Person au2;
+			int i=0;
 			String print="";
 			PrintWriter wrfile =new PrintWriter(new File("wroteRelas.txt"));
-			for(int i=0;i<fameList.size();i++) {
-				au=fameList.get(i);
+			for(Person au:fameList) {
+				try {
+					i=fameList.getIndex(au);
+				} catch (EmptyCollectionException e) {
+					//will not happen
+				} catch (ElementNotFoundException e) {
+					//will not happen
+				}
 				for(int j=i+1;j<fameList.size();j++) {
 					au2=fameList.get(j);
 					if(au.isFriend(au2)) {
-						print=au.getPersonData()[0]+","+au2.getPersonData()[0];
-						wrfile.println(print);
+						print=print+au.getPersonData()[0]+","+au2.getPersonData()[0]+"\n";
 					}
 				}
 			}
+			wrfile.println(print);
 			
 			wrfile.close();
 		} catch (FileNotFoundException e) {
