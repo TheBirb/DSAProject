@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.Scanner;
 
 import Exceptions.*;
+//import structures.BinarySearchFriends;
+import structures.BinarySearchID;
 import structures.LinkedList;
-import structures.LinkedOrderedFameList;
 /**
  * Class that represents a network
  * @author Iker Pintado
@@ -18,11 +20,8 @@ public class SocialList {
 	/**
 	 * the list of persons of the network
 	 */
-	private LinkedList<Person> list;
-	/**
-	 * the ordered by fame list of persons of the network
-	 */
-	private LinkedOrderedFameList fameList;
+	private BinarySearchID list;
+
 	/**
 	 * the only instance of the network--singleton pattern
 	 */
@@ -33,8 +32,7 @@ public class SocialList {
 	 */
 	private SocialList() {
 		super();
-		list=new LinkedList<Person>();
-		fameList=new LinkedOrderedFameList();
+		list=new BinarySearchID();
 	}
 	/**
 	 * method to get the only instance of the class--singleton pattern
@@ -52,8 +50,7 @@ public class SocialList {
 	public void addPerson(Person p) throws AlreadyAddedPerson{
 		if(!list.isEmpty()) 
 			if(list.contains(p)) throw new AlreadyAddedPerson();
-		list.addToTail(p);
-		fameList.add(p);
+		list.add(p);
 		
 	}
 	/**
@@ -64,7 +61,6 @@ public class SocialList {
 	public void removePerson(Person p){	
 		try {
 			list.remove(p);
-			fameList.remove(p);
 			
 		} catch (EmptyCollectionException | ElementNotFoundException e) {
 			System.out.println("\n \u001B[31m"+"Already removed person or never existed"+"\u001B[0m \n");
@@ -72,7 +68,6 @@ public class SocialList {
 		if(!p.friendList.isEmpty()) {
 			for(Person pe:p.friendList) {
 				pe.removeFriend(p);
-				fameList.update(pe);
 			}
 		}
 		
@@ -88,14 +83,8 @@ public class SocialList {
 		String[] s=new String[11];
 		s[0]=id;
 		Person w=new Person(s);
-		if(list!=null) {
-			for(Person p:list) {
-				if(p.equals(w)) {
-					return p;
-				}
-			}
-		}
-		throw new ElementNotFoundException("\n \u001B[31m We cannot find that person\n \u001B[0m");
+		return list.find(w);
+
 	}
 	/**
 	 * Method to know if a person is in the network
@@ -127,21 +116,12 @@ public class SocialList {
 	public void printFamePeople() {
 		String pr="\n \u001B[33m"+"People:"+"\u001B[0m \n\n";
 		if(list!=null) {
+			LinkedList<Person> fameList=list.toFameList();
 			for(Person p:fameList) {
 				pr=pr+p.toString()+"\n";
 			}
 		}
 		System.out.println(pr+"\n \u001B[33m"+"There are no more people"+"\u001B[0m \n");
-	}
-	/**
-	 * updates the fame of the introduced people, it is to say, relocates the people in the ordered list
-	 * to update the position
-	 * @param p:Person 1
-	 * @param q:Person 2
-	 */
-	public void updateFame(Person p,Person q) {
-		fameList.update(p);
-		fameList.update(q);
 	}
 	
 	/**
@@ -215,32 +195,31 @@ public class SocialList {
 		String splitBy=",";
 		String[] friends;
 		String line="";
-		int m=0,n=0,i=0,q=3,w=3,det=0;
-		
+		int q=3,w=3,det=0;
+		Iterator<Person> it;
+		Person p1,p2,pp;
+		p1=p2=pp=null;
 		try {
 			Scanner sr=new Scanner(new File(s));
-			
 			while(sr.hasNextLine()) {
 				line=sr.nextLine();
 				if(!line.equals("")) {
 					friends=line.split(splitBy);
-						
-					while(w+q!=0 && i<list.size()) {
-							if(list.get(i).equals(findPerson(friends[0]))) {
-								m=i;//indice del amigo 1
-								q=0;
-							}else if(list.get(i).equals(findPerson(friends[1]))) {
-								n=i;//indice del amigo 2
-								w=0;
-							}
-							i++;
+					it=list.iterator();	
+					while(w+q!=0 && it.hasNext()) {
+						pp=it.next();
+						if(pp.equals(findPerson(friends[0]))) {
+							p1=pp;//amigo 1
+							q=0;
+						}else if(pp.equals(findPerson(friends[1]))) {
+							p2=pp;// amigo 2
+							w=0;
+						}
 					}
 					
 					if(w+q==0) {
 						try {
-							list.get(m).addFriend(list.get(n));
-							fameList.update(list.get(m));
-							fameList.update(list.get(n));
+							p1.addFriend(p2);
 						} catch (AlreadyAddedFriend e) {
 							System.out.println("\n \u001B[31m"+"Already added friend"+"\u001B[0m \n");
 						}
@@ -249,7 +228,6 @@ public class SocialList {
 					}
 					w=3;
 					q=3;
-					i=0;
 				}
 			}
 			if(det>0)
@@ -271,8 +249,10 @@ public class SocialList {
 		String splitBy=",";
 		String[] friends;
 		String line="";
-		int m=0,n=0,i=0,q=3,w=3,det=0;
-		
+		int q=3,w=3,det=0;
+		Iterator<Person> it;
+		Person p1,p2,pp;
+		p1=p2=pp=null;
 		try {
 			Scanner sr=new Scanner(new File(s));
 			
@@ -280,29 +260,27 @@ public class SocialList {
 				line=sr.nextLine();
 				if(!line.equals("")) {
 					friends=line.split(splitBy);
-						
-					while(w+q!=0 && i<list.size()) {
-							if(list.get(i).equals(findPerson(friends[0]))) {
-								m=i;//indice del amigo 1
+					it=list.iterator();		
+					while(w+q!=0 && it.hasNext()) {
+						pp=it.next();
+							if(pp.equals(findPerson(friends[0]))) {
+								p1=pp;//amigo 1
 								q=0;
-							}else if(list.get(i).equals(findPerson(friends[1]))) {
-								n=i;//indice del amigo 2
+							}else if(pp.equals(findPerson(friends[1]))) {
+								p2=pp;//amigo 2
 								w=0;
 							}
-							i++;
 					}
 					
 					if(w+q==0) {
 						
-						list.get(m).removeFriend(list.get(n));
-						fameList.update(list.get(m));
-						fameList.update(list.get(n));
+						p1.removeFriend(p2);
+						
 					}else {
 						det++;
 					}
 					w=3;
 					q=3;
-					i=0;
 				}
 			}
 			if(det>0)
@@ -335,20 +313,19 @@ public class SocialList {
 	 */
 	public void getRelasTXT() {
 		try {
-			Person au2;
-			int i=0;
+			Person au2,au;
 			String print="";
 			PrintWriter wrfile =new PrintWriter(new File("wroteRelas.txt"));
-			for(Person au:fameList) {
+			LinkedList<Person> link=list.toFameList();
+			Iterator<Person> it,ite=link.iterator();
+			while(ite.hasNext()) {
+				au=ite.next();
 				try {
-					i=fameList.getIndex(au);
-				} catch (EmptyCollectionException e) {
-					//will not happen
-				} catch (ElementNotFoundException e) {
-					//will not happen
-				}
-				for(int j=i+1;j<fameList.size();j++) {
-					au2=fameList.get(j);
+					link.remove(au);//always removes the first one
+				} catch (EmptyCollectionException | ElementNotFoundException e) {}//the element will surely be found and the collection will never be empty
+				it=link.iterator();
+				while(it.hasNext()) {
+					au2=it.next();
 					if(au.isFriend(au2)) {
 						print=print+au.getPersonData()[0]+","+au2.getPersonData()[0]+"\n";
 					}

@@ -1,7 +1,11 @@
 package Social;
 
+//import structures.BinarySearchFriends;
+import structures.BinarySearchID;
 import structures.LinkedList;
-import structures.LinkedOrderedFameList;
+
+//import java.util.Iterator;
+
 import Exceptions.AlreadyAddedFriend;
 import Exceptions.ElementNotFoundException;
 import Exceptions.EmptyCollectionException;
@@ -13,7 +17,7 @@ import Exceptions.EmptyCollectionException;
  *
  */
 
-public class Person {
+public class Person implements Comparable<Person>{
 		/**
 		 * parameter that has all the important data of any person
 		 * index:
@@ -33,11 +37,8 @@ public class Person {
 		/**
 		 * friend list
 		 */
-		protected LinkedList<Person> friendList;
-		/**
-		 * the ordered by fame list of persons of the network
-		 */
-		protected LinkedOrderedFameList friendFameList;
+		protected BinarySearchID friendList;
+		
 		/**
 		 * constructor of the class, makes sure that no field is null
 		 * @param the data of the person
@@ -53,8 +54,7 @@ public class Person {
 				}
 			}
 			this.personData = p;
-			friendList=new LinkedList<Person>();
-			friendFameList=new LinkedOrderedFameList();
+			friendList=new BinarySearchID();
 		}
 		
 
@@ -175,18 +175,11 @@ public class Person {
 		 */
 		public void removeFriend(Person p) {
 			try {
+				
 				p.friendList.remove(this);
 				this.friendList.remove(p);
-				p.friendFameList.remove(this);
-				this.friendFameList.remove(p);
-				for(Person pe:this.friendFameList) {
-					pe.friendFameList.update(this);
-				}
-				for(Person pe:p.friendFameList) {
-					pe.friendFameList.update(p);
-				}
 			} catch (EmptyCollectionException | ElementNotFoundException e) {
-				System.out.println("\n "+"\u001B[31m"+"friend already removed or has never existed"+"\u001B[0m \n");
+				System.out.println("\n "+"\u001B[31m"+"friend already removed or has never existedd"+"\u001B[0m \n");
 			}
 
 			
@@ -198,16 +191,10 @@ public class Person {
 		 */
 		public void addFriend(Person f) throws AlreadyAddedFriend{
 			if(f.isFriend(this)) throw new AlreadyAddedFriend();
-			this.friendList.addToTail(f);
-			f.friendList.addToTail(this);
-			this.friendFameList.add(f);
-			f.friendFameList.add(this);
-			for(Person pe:this.friendFameList) {
-				pe.friendFameList.update(this);
-			}
-			for(Person pe:f.friendFameList) {
-				pe.friendFameList.update(f);
-			}
+			//Person p1,p2;
+			//p1=p2=null;
+			this.friendList.add(f);
+			f.friendList.add(this);
 			
 		}
 		/**
@@ -305,7 +292,8 @@ public class Person {
 		public void printFamousFriends() {
 			String pr="Friends:\n";
 			String lone="";
-			if(!friendFameList.isEmpty()) {
+			if(!friendList.isEmpty()) {
+				LinkedList<Person> friendFameList=friendList.toFameList();
 				for(Person p:friendFameList) {
 					pr=pr+p.toString()+"\n";
 				}
@@ -335,7 +323,8 @@ public class Person {
 		public void printFamousFriendsNames() {
 			String pr="Friends:\n";
 			String lone="";
-			if(!friendFameList.isEmpty()) {
+			if(!friendList.isEmpty()) {
+				LinkedList<Person> friendFameList=friendList.toFameList();
 				for(Person p:friendFameList) {
 					pr=pr+"\u001B[36m"+p.getPersonData()[0]+"\u001B[0m \n";
 				}
@@ -350,14 +339,20 @@ public class Person {
 		 * @return true if the person is in the list, false if not
 		 */
 		public boolean isFriend(Person p) {
-			if(friendList!=null&&!friendList.isEmpty()) {
-				for(Person pe:friendFameList) {
-					if(pe.equals(p)) {
-						return true;
-					}
-				}
-			}
-			return false;
+			
+			return friendList.contains(p);
+		}
+		/**
+		 * Overridden compareTo method from comparable interface
+		 */
+		@Override
+		public int compareTo(Person o) {
+			
+			return this.getPersonData()[0].compareTo(o.getPersonData()[0]);
+		}
+		public int compareToByFriends(Person o) {
+			
+			return this.getNumFriends()-o.getNumFriends();
 		}
 
 		

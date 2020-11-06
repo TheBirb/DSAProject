@@ -34,9 +34,9 @@ public class Main {
 		while(!logout) {
 			System.out.println("\u001B[33m"
 					+ "-------------------------------------------------------"
-					+ "\n|"+"\u001B[34m"+"Show someone큦 friends ordered by antiquity----1     "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[34m"+"Show someone큦 friends ordered alphabetically----1   "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[34m"+"Show someone큦 friends ordered by fame----2          "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"show all the people ordered by antiquity----3        "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[34m"+"show all the people ordered alphabetically----3      "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[34m"+"show all the people ordered by fame----4             "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[34m"+"check existence of someone----5                      "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[34m"+"Print all the people of the network at a .txt----6   "+ "\u001B[33m"+"|"
@@ -217,7 +217,7 @@ public class Main {
 			Person f=so.findPerson(id1);
 			Person n=so.findPerson(id2);
 			n.addFriend(f);
-			so.updateFame(f, n);
+			//so.updateFame(f, n);
 		} catch (ElementNotFoundException e) {
 			System.out.println("\n \u001B[31m"+"one or the both id큦 does/do not exist"+"\u001B[0m \n");
 		} catch (AlreadyAddedFriend e){
@@ -243,7 +243,7 @@ public class Main {
 			Person f=so.findPerson(id1);
 			Person n=so.findPerson(id2);
 			n.removeFriend(f);
-			so.updateFame(f, n);
+			//so.updateFame(f, n);
 		} catch (ElementNotFoundException e) {
 			System.out.println("\n \u001B[31m"+"one or the both id큦 does/do not exist"+"\u001B[0m \n");
 		} 
@@ -276,7 +276,7 @@ public class Main {
 	@SuppressWarnings("resource")
 	public static void someonesFriends(SocialList soc) {
 		Scanner s=new Scanner(System.in);
-		System.out.println("\u001B[33m"+"type the id of the person whose firends will be printed ordered by antiquity:"+"\u001B[0m ");
+		System.out.println("\u001B[33m"+"type the id of the person whose firends will be printed ordered alphabetically:"+"\u001B[0m ");
 		String id=s.nextLine();
 
 		try {
