@@ -34,23 +34,25 @@ public class Main {
 		while(!logout) {
 			System.out.println("\u001B[33m"
 					+ "-------------------------------------------------------"
-					+ "\n|"+"\u001B[34m"+"Show someone큦 friends ordered alphabetically----1   "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"Show someone큦 friends ordered by fame----2          "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"show all the people ordered alphabetically----3      "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"show all the people ordered by fame----4             "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"check existence of someone----5                      "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"Print all the people of the network at a .txt----6   "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"print someone큦 data----7                            "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"Print all the relationships to a .txt----8           "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"add another people file----9                         "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"add relationships file----10                         "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"add a single person----11                            "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"add a relation-----12                                "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"remove a single person----13                         "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"remove a relationship----14                          "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"remove people from a .txt----15                      "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"remove relationships from a .txt----16               "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[34m"+"log out with any other number                        "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"Show someone큦 friends ordered alphabetically----1   "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"Show someone큦 friends ordered by fame----2          "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"show all the people ordered alphabetically----3      "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"show all the people ordered by fame----4             "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"check existence of someone----5                      "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"Print all the people of the network at a .txt----6   "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"print someone큦 data----7                            "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"Print all the relationships to a .txt----8           "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"add another people file----9                         "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"add relationships file----10                         "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"add a single person----11                            "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"add a relation-----12                                "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"remove a single person----13                         "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"remove a relationship----14                          "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"remove people from a .txt----15                      "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"remove relationships from a .txt----16               "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"sort people by birthplace, surname and----19         "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+" name in a specific range of ages---------19         "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"log out with any other number                        "+ "\u001B[33m"+"|"
 					+ "\n-------------------------------------------------------"+"\u001B[0m" );
 			opt=s.nextLine();
 			
@@ -112,6 +114,9 @@ public class Main {
 				case "16":
 					removeRela(soc);
 					break;
+				case "19":
+					sortAges(soc);
+					break;
 				default:
 					System.out.println("\n \u001B[32m"+"See you soon!!!!"+"\u001B[0m");
 					logout=true;
@@ -125,7 +130,24 @@ public class Main {
 	
 	
 	
-	
+	/**
+	 * method to sort the people of specific ages by birthplace, surname and name
+	 * @param soc    the network
+	 */ 
+	@SuppressWarnings("resource")
+	public static void sortAges(SocialList soc) {
+		Scanner s=new Scanner(System.in);
+		System.out.println("\n \u001B[33m"+"Type the first age parameter (just the year)"+"\u001B[0m");
+		int d1=s.nextInt();
+		System.out.println("\n \u001B[33m"+"Type the second age parameter (just the year)"+"\u001B[0m");
+		int d2=s.nextInt();
+		soc.sortByAge(d1, d2);
+	}
+
+
+
+
+
 	/**
 	 * method to register a new person
 	 * @param the network

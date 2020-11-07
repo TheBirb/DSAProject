@@ -4,6 +4,7 @@ package Social;
 import structures.BinarySearchID;
 import structures.LinkedList;
 
+
 //import java.util.Iterator;
 
 import Exceptions.AlreadyAddedFriend;
@@ -53,7 +54,7 @@ public class Person implements Comparable<Person>{
 					pe[i]="";
 				}
 			}
-			this.personData = p;
+			this.personData = pe;
 			friendList=new BinarySearchID();
 		}
 		
@@ -354,6 +355,12 @@ public class Person implements Comparable<Person>{
 			
 			return this.getNumFriends()-o.getNumFriends();
 		}
+
+
+		
+			
+		
+		
 
 		
 }

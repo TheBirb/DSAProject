@@ -175,10 +175,11 @@ public class BinarySearchFriends extends LinkedBinarySearchTree<Person> implemen
 	   
 	public LinkedList<Person> toList(){
 		LinkedList<Person> ret=new LinkedList<Person>();
-		Iterator<Person> it=this.iterator();
-		while(it.hasNext()) {
+		//Iterator<Person> it=this.iterator();
+		inorder(root,ret);
+		/*while(it.hasNext()) {
 			ret.addToTail(it.next());
-		}
+		}*/
 		return ret;
 	}
 	
