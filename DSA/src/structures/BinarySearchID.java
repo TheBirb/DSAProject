@@ -46,10 +46,11 @@ public class BinarySearchID extends LinkedBinarySearchTree<Person> implements It
 	 */
 	public LinkedList<Person> toList(){
 		LinkedList<Person> ret=new LinkedList<Person>();
-		Iterator<Person> it=this.iterator();
+		inorder(root,ret);
+		/*Iterator<Person> it=this.iterator();
 		while(it.hasNext()) {
 			ret.addToTail(it.next());
-		}
+		}*/
 		return ret;
 	}
 	/**

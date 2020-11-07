@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Scanner;
 
@@ -26,6 +29,25 @@ public class SocialList {
 	 * the only instance of the network--singleton pattern
 	 */
 	private static SocialList instance;
+	/**
+	 * Comparator for sorting the list in a not natural order
+	 */
+	public static Comparator<Person> BSNComparator=new Comparator<Person>() {
+		/**
+		 * compare method for sorting in some cases
+		 */
+		@Override
+		public int compare(Person o1, Person o2) {
+			int res=o1.getPersonData()[5].compareTo(o2.getPersonData()[5]);
+			if(res==0) {
+				res=o1.getPersonData()[2].compareTo(o2.getPersonData()[2]);
+				if(res==0) {
+					res=o1.getPersonData()[1].compareTo(o2.getPersonData()[1]);
+				}
+			}
+			return res;
+		}
+	};
 
 	/**
 	 * private constructor of the class--singleton pattern
@@ -337,6 +359,41 @@ public class SocialList {
 		} catch (FileNotFoundException e) {
 			System.out.println("\n \u001B[31m"+"txt not found"+"\u001B[0m \n");
 		}
+	}
+	/**
+	 * This method sorts by birthplace,surname and name all the people born between the given dates
+	 * if the dates are not given in order, the method order them
+	 * @param d1 the first date, should be less than d2
+	 * @param d2 the second date, should be more than d1
+	 */
+	public void sortByAge(int d1, int d2) {
+		ArrayList<Person> print=new ArrayList<Person>();
+		String date="",prnt="\u001B[33m"+"The people born between "+ "\u001B[32m"+d1+ "\u001B[33m"+" and "+ "\u001B[32m"+d2+ "\u001B[33m"+" are:"+ "\u001B[0m \n";
+		Integer num=-1;
+		Person au=null;
+		if(d1>d2) {//change the values if they are unordered
+			int aux=d1;
+			d1=d2;
+			d2=aux;
+		}
+		for(Iterator<Person> it=list.iterator();it.hasNext();) {//it is planned so the two outing conditions will be activated at the same time but we do this just in case
+			au=it.next();
+			date=au.getPersonData()[3].split("-")[2];
+			num=Integer.parseInt(date);
+			if(num.intValue()>=d1 && num.intValue()<=d2) {
+				print.add(au);
+			}
+		}
+		int i=print.size();
+		if(i>0) {
+			Collections.sort(print,BSNComparator);
+			for(int j=0;j<i;j++) {
+				prnt=prnt+print.get(j).toString()+"\n";
+			}
+		}else {
+			prnt=prnt+"\u001B[33m"+"There are no people born between the given dates"+"\u001B[30m";
+		}
+		System.out.println(prnt);		
 	}
 	
 	
