@@ -71,7 +71,7 @@ public class SocialList {
 	 */
 	public void addPerson(Person p) throws AlreadyAddedPerson{
 		if(!list.isEmpty()) 
-			if(list.contains(p)) throw new AlreadyAddedPerson();
+			if(list.contains(p)) throw new AlreadyAddedPerson("Already added");
 		list.add(p);
 		
 	}
@@ -219,38 +219,44 @@ public class SocialList {
 		String line="";
 		int q=3,w=3,det=0;
 		Iterator<Person> it;
-		Person p1,p2,pp;
-		p1=p2=pp=null;
+		Person p1,p2,pp,pa1,pa2;
+		p1=p2=pp=pa1=pa2=null;
+		LinkedList<Person> listit=list.toList();
 		try {
 			Scanner sr=new Scanner(new File(s));
 			while(sr.hasNextLine()) {
 				line=sr.nextLine();
 				if(!line.equals("")) {
 					friends=line.split(splitBy);
-					it=list.iterator();	
-					while(w+q!=0 && it.hasNext()) {
-						pp=it.next();
-						if(pp.equals(findPerson(friends[0]))) {
-							p1=pp;//amigo 1
-							q=0;
-						}else if(pp.equals(findPerson(friends[1]))) {
-							p2=pp;// amigo 2
-							w=0;
+					it=listit.iterator();	
+					try {
+						pa1=findPerson(friends[0]);
+						pa2=findPerson(friends[1]);
+						while(w+q!=0 && it.hasNext()) {
+							pp=it.next();
+							if(pp.equals(pa1)) {
+								p1=pp;//amigo 1
+								q=0;
+							}else if(pp.equals(pa2)) {
+								p2=pp;// amigo 2
+								w=0;
+							}
 						}
-					}
-					
-					if(w+q==0) {
-						try {
-							p1.addFriend(p2);
-						} catch (AlreadyAddedFriend e) {
-							System.out.println("\n \u001B[31m"+"Already added friend"+"\u001B[0m \n");
+						
+						if(w+q==0) {
+							try {
+								p1.addFriend(p2);
+							} catch (AlreadyAddedFriend e) {
+								System.out.println("\n \u001B[31m"+"Already added friend"+"\u001B[0m \n");
+							}
 						}
-					}else {
+						w=3;
+						q=3;				
+					} catch (ElementNotFoundException e1) {
 						det++;
 					}
-					w=3;
-					q=3;
 				}
+					
 			}
 			if(det>0)
 				throw new ElementNotFoundException("\n \u001B[31m"+"There where "+det+" impossible to stablish relations"+"\u001B[0m \n");
@@ -273,8 +279,9 @@ public class SocialList {
 		String line="";
 		int q=3,w=3,det=0;
 		Iterator<Person> it;
-		Person p1,p2,pp;
-		p1=p2=pp=null;
+		Person p1,p2,pp,pa1,pa2;
+		p1=p2=pp=pa1=pa2=null;
+		LinkedList<Person> listit=list.toList();
 		try {
 			Scanner sr=new Scanner(new File(s));
 			
@@ -282,27 +289,32 @@ public class SocialList {
 				line=sr.nextLine();
 				if(!line.equals("")) {
 					friends=line.split(splitBy);
-					it=list.iterator();		
-					while(w+q!=0 && it.hasNext()) {
-						pp=it.next();
-							if(pp.equals(findPerson(friends[0]))) {
-								p1=pp;//amigo 1
-								q=0;
-							}else if(pp.equals(findPerson(friends[1]))) {
-								p2=pp;//amigo 2
-								w=0;
-							}
-					}
+					it=listit.iterator();	
+					try {
+						pa1=findPerson(friends[0]);
+						pa2=findPerson(friends[1]);
+						while(w+q!=0 && it.hasNext()) {
+							pp=it.next();
+								if(pp.equals(pa1)) {
+									p1=pp;//amigo 1
+									q=0;
+								}else if(pp.equals(pa2)) {
+									p2=pp;//amigo 2
+									w=0;
+								}
+						}
+						
+						if(w+q==0) {
+							
+							p1.removeFriend(p2);
+							
+						}
+						w=3;
+						q=3;
 					
-					if(w+q==0) {
-						
-						p1.removeFriend(p2);
-						
-					}else {
+					} catch (ElementNotFoundException e) {
 						det++;
 					}
-					w=3;
-					q=3;
 				}
 			}
 			if(det>0)
@@ -395,6 +407,11 @@ public class SocialList {
 		}
 		System.out.println(prnt);		
 	}
-	
+	/**
+	 * method mainly used at Junit5 tests, destroys the instance of the class
+	 */
+	public static void destroy() {
+		instance=null;
+	}
 	
 }
