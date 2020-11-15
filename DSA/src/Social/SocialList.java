@@ -13,10 +13,11 @@ import java.util.Scanner;
 import Exceptions.*;
 //import structures.BinarySearchFriends;
 import structures.BinarySearchID;
+import structures.BinaryTreeNode;
 import structures.LinkedList;
 /**
  * Class that represents a network
- * @author Iker Pintado
+ * @author Iker Pintado, Jon Moríñigo, Iker Fernandez
  *
  */
 public class SocialList {
@@ -407,6 +408,44 @@ public class SocialList {
 		}
 		System.out.println(prnt);		
 	}
+	/**
+     * This method prints all the friends of a user with a given surname.
+     * If there´s no users with the given surname nothing is printed
+     * @param surname    the surname to search
+     */
+    public void searchFriendsBySurname(String surname) {
+        Person au=null;
+        int i=0;
+        for(Iterator<Person> it=list.iterator(); it.hasNext();) {
+            au=it.next();
+            if(au.getPersonData()[2].equals(surname)) {
+                i++;
+                System.out.println("These are the friends of " + au.getPersonData()[0] + " (" + au.getPersonData()[1] + " " + au.getPersonData()[2] + ")");
+                au.printFriends();
+            }
+        }
+        if(i==0) {
+            System.out.println("There isn´t any user with the surname " + surname + ".");
+        }
+    }
+	/**
+	 * This method prints in console given a city all the people from the social network that live in that city
+	 * @param city, city that the user inserts
+	 */
+	public void retrieveByCity(String city) {
+		Iterator<Person> it= list.iterator();
+		while(it.hasNext()) {
+			Person per=it.next();
+			if(city.equals(per.getPersonData()[6])) {
+				System.out.println("\u001B[33m"+"-------------------------------- "+"\u001B[0m"+" \n");
+				System.out.println("\n \u001B[27m"+"Id: "+per.getPersonData()[0]+"\u001B[0m \n");
+				System.out.println("\n \u001B[27m"+"Surname: "+per.getPersonData()[2]+"\u001B[0m \n");
+				System.out.println("\u001B[33m"+"-------------------------------- "+"\u001B[0m"+" \n");
+			}
+			
+		}
+	}
+	
 	/**
 	 * method mainly used at Junit5 tests, destroys the instance of the class
 	 */

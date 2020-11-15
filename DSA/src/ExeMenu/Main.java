@@ -50,6 +50,8 @@ public class Main {
 					+ "\n|"+"\u001B[27m"+"remove a relationship----14                          "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[27m"+"remove people from a .txt----15                      "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[27m"+"remove relationships from a .txt----16               "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"prints friends of a user given a surname----17       "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"Retrieve people given a city----18                   "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[27m"+"sort people by birthplace, surname and----19         "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[27m"+" name in a specific range of ages---------19         "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[27m"+"log out with any other number                        "+ "\u001B[33m"+"|"
@@ -113,6 +115,12 @@ public class Main {
 					break;
 				case "16":
 					removeRela(soc);
+					break;
+				case "17":
+					surnameFriends(soc);
+					break;
+				case "18":
+					retrieveByCity(soc);
 					break;
 				case "19":
 					sortAges(soc);
@@ -450,6 +458,30 @@ public class Main {
 		} catch (ElementNotFoundException e) {
 			System.out.println("\n \u001B[31m"+e.getMessage()+"\u001B[0m \n");
 		}
+		
+	}
+	/**
+     * method to print all the friends of a user with a given surname.
+     * @param soc    the network
+     */
+    @SuppressWarnings("resource")
+    public static void surnameFriends(SocialList soc) {
+        Scanner s=new Scanner(System.in);
+        System.out.println("\n \u001B[33m"+"Type the user(s) surname"+"\u001B[0m");
+        String sur=s.next();
+        soc.searchFriendsBySurname(sur);
+    }
+
+	/**
+	 * Retrieves the people from the same city
+	 * @param soc the network
+	 */
+	@SuppressWarnings("resource")
+	public static void retrieveByCity(SocialList soc) {
+		Scanner s=new Scanner(System.in);
+		System.out.println("\u001B[33m"+"type the city you want to retrieve the people from"+"\u001B[0m");
+		String city=s.nextLine();
+		soc.retrieveByCity(city);
 		
 	}
 }
