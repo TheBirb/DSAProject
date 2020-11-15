@@ -17,7 +17,7 @@ import structures.BinaryTreeNode;
 import structures.LinkedList;
 /**
  * Class that represents a network
- * @author Iker Pintado, Jon Moríñigo, Iker Fernandez
+ * @author Iker Pintado, Jon MorÃ­Ã±igo, Iker Fernandez
  *
  */
 public class SocialList {
@@ -410,7 +410,7 @@ public class SocialList {
 	}
 	/**
      * This method prints all the friends of a user with a given surname.
-     * If there´s no users with the given surname nothing is printed
+     * If thereÂ´s no users with the given surname nothing is printed
      * @param surname    the surname to search
      */
     public void searchFriendsBySurname(String surname) {
@@ -425,24 +425,32 @@ public class SocialList {
             }
         }
         if(i==0) {
-            System.out.println("There isn´t any user with the surname " + surname + ".");
+            System.out.println("There isnÂ´t any user with the surname " + surname + ".");
         }
     }
 	/**
-	 * This method prints in console given a city all the people from the social network that live in that city
+	 * This method prints in console given a city all the people from the social network where born in that city
 	 * @param city, city that the user inserts
 	 */
 	public void retrieveByCity(String city) {
 		Iterator<Person> it= list.iterator();
+		String prin="";
+		int cn=0;
 		while(it.hasNext()) {
 			Person per=it.next();
-			if(city.equals(per.getPersonData()[6])) {
-				System.out.println("\u001B[33m"+"-------------------------------- "+"\u001B[0m"+" \n");
-				System.out.println("\n \u001B[27m"+"Id: "+per.getPersonData()[0]+"\u001B[0m \n");
-				System.out.println("\n \u001B[27m"+"Surname: "+per.getPersonData()[2]+"\u001B[0m \n");
-				System.out.println("\u001B[33m"+"-------------------------------- "+"\u001B[0m"+" \n");
+			if(city.equals(per.getPersonData()[5])) {
+				prin=prin+"\u001B[33m"+"-------------------------------- "+"\u001B[0m"+" \n"
+					+"\u001B[27m"+"Id: "+per.getPersonData()[0]+"\u001B[0m \n"
+					+"\u001B[27m"+"Surname: "+per.getPersonData()[2]+"\u001B[0m \n"
+					+"\u001B[33m"+"-------------------------------- "+"\u001B[0m"+" \n";
+				cn++;
 			}
 			
+		}
+		if(cn==0){
+			System.out.println("There are no people born in "+city+".");
+		}else{
+			System.out.println(prin);
 		}
 	}
 	
