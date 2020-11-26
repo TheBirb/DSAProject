@@ -4,6 +4,7 @@ package Social;
 import structures.BinarySearchID;
 import structures.LinkedList;
 
+import java.util.Arrays;
 
 //import java.util.Iterator;
 
@@ -46,20 +47,27 @@ public class Person implements Comparable<Person>{
 		 */
 		
 		public Person(String[] p) {
-			String[] pe=new String[11];
-			for(int i=0;i<pe.length;i++) {
-				if(i<p.length) {
-					pe[i]=p[i];
-				}else {
-					pe[i]="";
-				}
-			}
-			this.personData = pe;
-			friendList=new BinarySearchID();
-		}
-		
-
-
+            String[] pe=new String[11];
+            if(p!=null) {
+                for(int i=0;i<pe.length;i++) {
+                    if(i<p.length) {
+                        pe[i]=p[i];
+                    }else {
+                        pe[i]="";
+                    }
+                }
+                if( pe[9]!="") {
+                	pe[9]=sortString(pe[9]);
+                }
+            }else {
+            	for(int i=0;i<pe.length;i++) {
+            		pe[i]="";
+            	}
+            }
+            
+            this.personData = pe;
+            friendList=new BinarySearchID();
+        }
 
 		/**
 		 * @return the personData
@@ -203,14 +211,25 @@ public class Person implements Comparable<Person>{
 		 * @param new film´s name
 		 */
 		public void addFilm(String f) {
-			setFilms(getPersonData()[9]+";"+f);
+			String movies=personData[9];
+			if(movies=="") {
+				personData[9]=f;
+				
+			}else  {
+	          	personData[9]=sortString(getPersonData()[9]+";"+f);
+			}
+            
 		}
 		/**
 		 * Method to add a new work to the work list
 		 * @param the new work´s name
 		 */
 		public void addWork(String f) {
-			setWorkPlaces((getPersonData()[8])+";"+f);
+			if(personData[8]!="") {
+				setWorkPlaces((getPersonData()[8])+";"+f);
+			}else {
+				personData[8]=f;
+			}
 		}
 		/**
 		 * Overridden toString method
@@ -355,6 +374,20 @@ public class Person implements Comparable<Person>{
 			
 			return this.getNumFriends()-o.getNumFriends();
 		}
+		/**
+         * Method to sort a string 
+         * @param re
+         * @return
+         */
+        public String sortString(String re) {    
+            String[] mi= re.split(";");
+            Arrays.sort(mi);
+            String fa=mi[0];
+            for(int i=1; i<mi.length; i++) {
+            	fa=fa + ";" + mi[i];
+            }
+            return fa;
+        }
 
 
 		

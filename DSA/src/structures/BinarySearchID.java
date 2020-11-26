@@ -70,4 +70,31 @@ public class BinarySearchID extends LinkedBinarySearchTree<Person> implements It
 		}
 		return ret;
 	}
+	/**
+	 * front-end method for printResidential
+	 * @param tree :the tree to traverse
+	 */
+	public void printResidential(LinkedBinarySearchTree<String> tree) {
+        printResidential(root, tree);
+    }
+	/**
+	 * worker method that traverses a tree and prints the name, surname, birthplace and the places where the people born in a place into the tree have studied
+	 * @param x :the node of this tree
+	 * @param tree :the tree with the birthplaces
+	 */
+    private void printResidential(BinaryTreeNode<Person> x, LinkedBinarySearchTree<String> tree){
+        if(x!=null) {
+            printResidential(x.left, tree);
+            if(tree.contains(x.element.getPersonData()[5])) {
+                System.out.println("\u001B[33m"+"---------------------------------------"+"\u001B[0m"+" \n"+
+                "\u001B[36m"+"Name: "+x.element.getPersonData()[1]      +"\u001B[0m"+" \n"+
+                "\u001B[36m"+"Surname: "+x.element.getPersonData()[2]   +"\u001B[0m"+" \n"+
+                "\u001B[36m"+"Birthplace: "+x.element.getPersonData()[5]+"\u001B[0m"+" \n"+
+                "\u001B[36m"+"Stuided at: "+x.element.getPersonData()[7]+"\u001B[0m"+" \n"+
+                "\u001B[33m"+"---------------------------------------"+"\u001B[0m"+" \n");
+            }
+            printResidential(x.right, tree);
+        }
+    }
+	
 }

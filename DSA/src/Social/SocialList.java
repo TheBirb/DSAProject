@@ -13,8 +13,9 @@ import java.util.Scanner;
 import Exceptions.*;
 //import structures.BinarySearchFriends;
 import structures.BinarySearchID;
-import structures.BinaryTreeNode;
+import structures.LinkedBinarySearchTree;
 import structures.LinkedList;
+import structures.TableWithCollision;
 /**
  * Class that represents a network
  * @author Iker Pintado, Jon Moríñigo, Iker Fernandez
@@ -103,7 +104,7 @@ public class SocialList {
 	 * @throws ElementNotFoundException when the id is not on the network
 	 */
 	public Person findPerson(String id)throws ElementNotFoundException {
-		String[] s=new String[11];
+		String[] s=new String[1];
 		s[0]=id;
 		Person w=new Person(s);
 		return list.find(w);
@@ -115,7 +116,7 @@ public class SocialList {
 	 * @return if the person is in the network
 	 */
 	public boolean isPerson(String id) {
-		String[] pe=new String[11];
+		String[] pe=new String[1];
 		pe[0]=id;
 		Person p=new Person(pe);
 		return list.contains(p);
@@ -425,7 +426,7 @@ public class SocialList {
             }
         }
         if(i==0) {
-            System.out.println("There isn´t any user with the surname " + surname + ".");
+            System.out.println("There isn�t any user with the surname " + surname + ".");
         }
     }
 	/**
@@ -453,7 +454,41 @@ public class SocialList {
 			System.out.println(prin);
 		}
 	}
-	
+	/**
+	 * given a filename retrieves all the home places of the people of the file
+	 * @param filename :the name of the file
+	 */
+	public void residentialRecovery(String filename) {
+		Person p=null;
+		String hometown="";
+		try {
+			LinkedBinarySearchTree<String> hometowns=new LinkedBinarySearchTree<String>();
+			Scanner sc= new Scanner(new File(filename));
+			while(sc.hasNext()) {
+				try {
+					p=findPerson(sc.nextLine());
+					hometown=p.getPersonData()[6];
+					if(!hometowns.contains(hometown)) {
+						hometowns.addElement(hometown);
+					}
+				} catch (ElementNotFoundException e) {
+					System.out.println("\n \u001B[31m"+"no such person found registered in the network"+"\u001B[0m \n");
+				}
+				
+			}					
+			list.printResidential(hometowns);
+		} catch (FileNotFoundException e) {
+			System.out.println("\n \u001B[31m"+"txt not found"+"\u001B[0m \n");
+		}
+		
+	}
+	public TableWithCollision<String, Person> retrieveIntoClassesFromMovies(){
+		TableWithCollision<String, Person> reta=new TableWithCollision<String, Person>();
+		for(Person p:list) {
+			reta.put(p.getPersonData()[9],p);
+		}
+		return reta;
+	}
 	/**
 	 * method mainly used at Junit5 tests, destroys the instance of the class
 	 */

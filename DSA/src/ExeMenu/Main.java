@@ -5,6 +5,8 @@ import java.util.Scanner;
 
 import Exceptions.*;
 import Social.*;
+import structures.LinkedList;
+import structures.TableWithCollision.Collision;
 /**
  * class to represent the social network
  * @author iker pintado
@@ -34,13 +36,13 @@ public class Main {
 		while(!logout) {
 			System.out.println("\u001B[33m"
 					+ "-------------------------------------------------------"
-					+ "\n|"+"\u001B[27m"+"Show someoneÂ´s friends ordered alphabetically----1   "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[27m"+"Show someoneÂ´s friends ordered by fame----2          "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"Show someone´s friends ordered alphabetically----1   "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"Show someone´s friends ordered by fame----2          "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[27m"+"show all the people ordered alphabetically----3      "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[27m"+"show all the people ordered by fame----4             "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[27m"+"check existence of someone----5                      "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[27m"+"Print all the people of the network at a .txt----6   "+ "\u001B[33m"+"|"
-					+ "\n|"+"\u001B[27m"+"print someoneÂ´s data----7                            "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"print someone´s data----7                            "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[27m"+"Print all the relationships to a .txt----8           "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[27m"+"add another people file----9                         "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[27m"+"add relationships file----10                         "+ "\u001B[33m"+"|"
@@ -54,6 +56,12 @@ public class Main {
 					+ "\n|"+"\u001B[27m"+"Retrieve people born in a given city----18           "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[27m"+"sort people by birthplace, surname and----19         "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[27m"+" name in a specific range of ages---------19         "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"Use a residential file to retrieve all the----20     "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+" names, surnames, birthplaces and studiedat---20     "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+" of the people born in the homplaces of ------20     "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+" the people of the file-----------------------20     "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"split all the people into classes depending----21    "+ "\u001B[33m"+"|"
+					+ "\n|"+"\u001B[27m"+"  on their favourite movies--------------------21    "+ "\u001B[33m"+"|"
 					+ "\n|"+"\u001B[27m"+"log out with any other number                        "+ "\u001B[33m"+"|"
 					+ "\n-------------------------------------------------------"+"\u001B[0m" );
 			opt=s.nextLine();
@@ -125,6 +133,12 @@ public class Main {
 				case "19":
 					sortAges(soc);
 					break;
+				case "20":
+					residential(soc);
+					break;
+				case "21":
+					splitInClasses(soc);
+					break;
 				default:
 					System.out.println("\n \u001B[32m"+"See you soon!!!!"+"\u001B[0m");
 					logout=true;
@@ -137,7 +151,39 @@ public class Main {
 	
 	
 	
-	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private static void splitInClasses(SocialList soc) {
+		LinkedList<Person> per;
+		for(Collision col:soc.retrieveIntoClassesFromMovies().getTable()) {
+			System.out.println("\n \u001B[32m"+"profile for ["+col.key+"]: \u001B[0m");
+			per=col.colli;
+			for(Person p:per) {
+				 System.out.println("\u001B[33m"+"---------------------------------------"+"\u001B[0m"+" \n"+
+			                "\u001B[36m"+"Name: "+p.getPersonData()[1]      +"\u001B[0m"+" \n"+
+			                "\u001B[36m"+"Surname: "+p.getPersonData()[2]   +"\u001B[0m"+" \n"+
+			                "\u001B[36m"+"Id: "+p.getPersonData()[0]+"\u001B[0m"+" \n"+
+			                "\u001B[33m"+"---------------------------------------"+"\u001B[0m"+" \n");
+			}
+		}
+	}
+
+
+
+	/**
+	 * method that asks for a file and returns some of the people's data that has been born in the place where the people from the file live
+	 * @param soc	the network
+	 */
+	@SuppressWarnings("resource")
+	private static void residential(SocialList soc) {
+		Scanner s=new Scanner(System.in);
+		System.out.println("\n \u001B[33m"+"Type the name of the residential file"+"\u001B[0m");
+		String dol=s.nextLine();
+		soc.residentialRecovery(dol);
+	}
+
+
+
+
 	/**
 	 * method to sort the people of specific ages by birthplace, surname and name
 	 * @param soc    the network
