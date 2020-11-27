@@ -18,7 +18,7 @@ import structures.LinkedList;
 import structures.TableWithCollision;
 /**
  * Class that represents a network
- * @author Iker Pintado, Jon Moríñigo, Iker Fernandez
+ * @author Iker Pintado, Jon MorÃ­Ã±igo, Iker Fernandez
  *
  */
 public class SocialList {
@@ -411,7 +411,7 @@ public class SocialList {
 	}
 	/**
      * This method prints all the friends of a user with a given surname.
-     * If there´s no users with the given surname nothing is printed
+     * If thereÂ´s no users with the given surname nothing is printed
      * @param surname    the surname to search
      */
     public void searchFriendsBySurname(String surname) {
@@ -426,7 +426,7 @@ public class SocialList {
             }
         }
         if(i==0) {
-            System.out.println("There isn�t any user with the surname " + surname + ".");
+            System.out.println("There isn´t any user with the surname " + surname + ".");
         }
     }
 	/**
@@ -482,6 +482,11 @@ public class SocialList {
 		}
 		
 	}
+	/**
+	*
+	*Method that retrieves all the people into clases based on the favourite movies
+	*@return a TableWithCollision that has the size of the number of different classes and in each index has all the people from that class
+	*/
 	public TableWithCollision<String, Person> retrieveIntoClassesFromMovies(){
 		TableWithCollision<String, Person> reta=new TableWithCollision<String, Person>();
 		for(Person p:list) {
