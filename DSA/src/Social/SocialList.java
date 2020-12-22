@@ -11,14 +11,18 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 import Exceptions.*;
+import GraphTraversals.BreadthFirstPathsFriendships;
+import GraphTraversals.LongPathFinder;
 //import structures.BinarySearchFriends;
 import structures.BinarySearchID;
 import structures.LinkedBinarySearchTree;
 import structures.LinkedList;
+import structures.PersonGraph;
+import structures.Stack;
 import structures.TableWithCollision;
 /**
  * Class that represents a network
- * @author Iker Pintado, Jon MorÃ­Ã±igo, Iker Fernandez
+ * @author Iker Pintado, Jon Morinigo, Iker Fernandez
  *
  */
 public class SocialList {
@@ -26,7 +30,17 @@ public class SocialList {
 	 * the list of persons of the network
 	 */
 	private BinarySearchID list;
-
+	
+	/**
+	 * boolean parameter that says if something in the social list has changed, it will be set to false every time a new graph is created
+	 */
+	public static boolean changed;
+	
+	/**
+	 * parameter for the graph that represents the network, it will always be updated if anything changes in the list
+	 */
+	private PersonGraph theGraph;
+	
 	/**
 	 * the only instance of the network--singleton pattern
 	 */
@@ -57,6 +71,7 @@ public class SocialList {
 	private SocialList() {
 		super();
 		list=new BinarySearchID();
+		changed=true;
 	}
 	/**
 	 * method to get the only instance of the class--singleton pattern
@@ -75,6 +90,7 @@ public class SocialList {
 		if(!list.isEmpty()) 
 			if(list.contains(p)) throw new AlreadyAddedPerson("Already added");
 		list.add(p);
+		changed=true;
 		
 	}
 	/**
@@ -94,7 +110,7 @@ public class SocialList {
 				pe.removeFriend(p);
 			}
 		}
-		
+		changed=true;
 		System.out.println("\n \u001B[32m DONE! \u001B[0m \n");
 	}
 	/**
@@ -176,6 +192,7 @@ public class SocialList {
 				
 		
 			sr.close();
+			changed=true;
 		}catch(IOException e) {
 			System.out.println("\n \u001B[31m"+e.getMessage()+"\u001B[0m \n");
 		}
@@ -204,6 +221,7 @@ public class SocialList {
 				
 		
 			sr.close();
+			changed=true;
 		}catch(IOException e) {
 			System.out.println("\n \u001B[31m"+e.getMessage()+"\u001B[0m \n");
 		}
@@ -214,7 +232,6 @@ public class SocialList {
 	 * @param the name of the file
 	 * @throws ElementNotFoundException if one person of the file is not in the list
 	 */
-	@SuppressWarnings("resource")
 	public void setFriendships(String s) throws ElementNotFoundException{
 		String splitBy=",";
 		String[] friends;
@@ -260,10 +277,11 @@ public class SocialList {
 				}
 					
 			}
+			sr.close();
+			changed=true;
 			if(det>0)
 				throw new ElementNotFoundException("\n \u001B[31m"+"There where "+det+" impossible to stablish relations"+"\u001B[0m \n");
 				
-			sr.close();
 			
 		}catch(FileNotFoundException e) {
 			System.out.println("\n \u001B[31m"+"file not found"+"\u001B[0m \n");
@@ -274,7 +292,6 @@ public class SocialList {
 	 * @param name of the file
 	 * @throws ElementNotFoundException if some name on the file does not appear in the network
 	 */
-	@SuppressWarnings("resource")
 	public void removeFriendships(String s) throws ElementNotFoundException{
 		String splitBy=",";
 		String[] friends;
@@ -319,10 +336,12 @@ public class SocialList {
 					}
 				}
 			}
+			changed=true;
+			sr.close();
 			if(det>0)
 				throw new ElementNotFoundException("\n \u001B[31m"+"There where "+det+" impossible to remove relations"+"\u001B[0m \n");
 				
-			sr.close();
+			
 			
 		}catch(FileNotFoundException e) {
 			System.out.println("\n \u001B[31m"+"file not found"+"\u001B[0m \n");
@@ -411,7 +430,7 @@ public class SocialList {
 	}
 	/**
      * This method prints all the friends of a user with a given surname.
-     * If thereÂ´s no users with the given surname nothing is printed
+     * If there´s no users with the given surname nothing is printed
      * @param surname    the surname to search
      */
     public void searchFriendsBySurname(String surname) {
@@ -426,7 +445,7 @@ public class SocialList {
             }
         }
         if(i==0) {
-            System.out.println("There isn´t any user with the surname " + surname + ".");
+            System.out.println("There isn�t any user with the surname " + surname + ".");
         }
     }
 	/**
@@ -454,6 +473,7 @@ public class SocialList {
 			System.out.println(prin);
 		}
 	}
+	
 	/**
 	 * given a filename retrieves all the home places of the people of the file
 	 * @param filename :the name of the file
@@ -482,11 +502,11 @@ public class SocialList {
 		}
 		
 	}
+	
 	/**
-	*
-	*Method that retrieves all the people into clases based on the favourite movies
-	*@return a TableWithCollision that has the size of the number of different classes and in each index has all the people from that class
-	*/
+	 * method that retrieves all the people into classes depending on their favourite movies
+	 * @return the table of the classes
+	 */
 	public TableWithCollision<String, Person> retrieveIntoClassesFromMovies(){
 		TableWithCollision<String, Person> reta=new TableWithCollision<String, Person>();
 		for(Person p:list) {
@@ -494,6 +514,115 @@ public class SocialList {
 		}
 		return reta;
 	}
+	
+	/**
+	 * Method that retrieves the shortest chain of friends between 2 people
+	 * @param from person 1
+	 * @param to person 2
+	 */
+	public void retrieveShortestChain(Person from,Person to) {
+		PersonForGraph[] valu;
+		if(changed) {
+			valu=list.toValueArray();
+			theGraph=new PersonGraph(valu);
+			changed=false;
+		}else {
+			valu=theGraph.getValues();
+		}
+		int s=-1,v=-1,i=0;
+		while(i<valu.length&&(s==-1||v==-1)) {//find the vertices that represent the persons in the graph
+			if(valu[i].thePerson.equals(from)) {
+				s=i;
+			}
+			if(valu[i].thePerson.equals(to)) {
+				v=i;
+			}
+			i++;
+		}
+		if(s!=-1 && v!=-1) {
+			BreadthFirstPathsFriendships traverser=new BreadthFirstPathsFriendships(theGraph, s);
+			String print;
+			if(traverser.hasPathTo(v)) {
+				String card="st";
+				i=1;
+				Stack<Person> path=traverser.pathTo(v);
+				print="\u001B[33m"+"The shortest chain between "+"\u001B[36m"+from.getPersonData()[0]+"\u001B[33m"+" and "+"\u001B[36m"+to.getPersonData()[0]+" is:\n \n";
+				Person poped;
+				while(!path.isEmpty()) {
+					if(i==2)		card="nd";
+					else if(i==3)	card="rd";
+					else if(i==4)	card="th";
+					poped=path.pop();
+					print=print+"\u001B[33m"+"-----------"+"\u001B[32m"+i+card+"\u001B[33m"+"---------- "+"\u001B[0m"+" \n"+
+							"\u001B[36m"+"Id: "+poped.getPersonData()[0]+"\u001B[0m"+" \n"+
+							"\u001B[36m"+"Name: "+poped.getPersonData()[1]      +"\u001B[0m"+" \n"+
+			                "\u001B[36m"+"Surname: "+poped.getPersonData()[2]   +"\u001B[0m"+" \n";
+					i++;	
+				}
+			}else {
+				print="\u001B[31m"+"There is no chain of friends between "+"\u001B[36m"+from.getPersonData()[0]+"\u001B[31m"+" and "+"\u001B[36m"+to.getPersonData()[0]+"\u001B[0m";
+			}
+			System.out.println(print);
+		}else {
+			System.out.println("\n \u001B[31m"+"One of the elements has not been found"+"\u001B[0m \n");
+		}
+	}
+	
+	/**
+	 * Method that retrieves the longest chain of friend between 2 people
+	 * @param from person 1
+	 * @param to person 2
+	 */
+	public void retrieveLongestChain(Person from,Person to) {
+		PersonForGraph[] valu;
+		if(changed) {
+			valu=list.toValueArray();
+			theGraph=new PersonGraph(valu);
+			changed=false;
+		}else {
+			valu=theGraph.getValues();
+		}
+		int s=-1,v=-1,i=0;
+		while(i<valu.length&&(s==-1||v==-1)) {//find the vertices that represent the persons in the graph
+			if(valu[i].thePerson.equals(from)) {
+				s=i;
+			}
+			if(valu[i].thePerson.equals(to)) {
+				v=i;
+			}
+			i++;
+		}
+		if(s!=-1 && v!=-1) {
+			boolean[] cp=new boolean[theGraph.V()];
+			int[] et=new int[theGraph.V()];
+			LongPathFinder.BackTrack(theGraph, 0, s, v, cp, et);
+			Stack<Person> path=LongPathFinder.getSolution();
+			String print;
+			if(path!=null) {
+				String card="st";
+				i=1;
+				print="\u001B[33m"+"The longest chain between "+"\u001B[36m"+from.getPersonData()[0]+"\u001B[33m"+" and "+"\u001B[36m"+to.getPersonData()[0]+" is:\n \n";
+				Person poped;
+				while(!path.isEmpty()) {
+					if(i==2)		card="nd";
+					else if(i==3)	card="rd";
+					else if(i==4)	card="th";
+					poped=path.pop();
+					print=print+"\u001B[33m"+"-----------"+"\u001B[32m"+i+card+"\u001B[33m"+"---------- "+"\u001B[0m"+" \n"+
+							"\u001B[36m"+"Id: "+poped.getPersonData()[0]+"\u001B[0m"+" \n"+
+							"\u001B[36m"+"Name: "+poped.getPersonData()[1]      +"\u001B[0m"+" \n"+
+			                "\u001B[36m"+"Surname: "+poped.getPersonData()[2]   +"\u001B[0m"+" \n";
+					i++;	
+				}
+			}else {
+				print="\u001B[31m"+"There is no chain of friends between "+"\u001B[36m"+from.getPersonData()[0]+"\u001B[31m"+" and "+"\u001B[36m"+to.getPersonData()[0]+"\u001B[0m";
+			}
+			System.out.println(print);
+		}else {
+			System.out.println("\n \u001B[31m"+"One of the elements has not been found"+"\u001B[0m \n");
+		}
+	}
+	
 	/**
 	 * method mainly used at Junit5 tests, destroys the instance of the class
 	 */
